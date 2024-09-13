@@ -19,9 +19,6 @@ setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
-    install_requires=[
-        # Add any dependencies here
-    ],
     entry_points={
         'console_scripts': [
             'rai-checklist=rai_checklist_cli.cli:main',
