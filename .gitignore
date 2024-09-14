@@ -37,8 +37,8 @@ ENV/
 .idea/
 *.swp
 
-# Example generated markdown files (keep this directory)
-examples/
+# Example generated markdown files 
+# examples/
 
 # Ignore other output files unless needed
 test_checklist.md
