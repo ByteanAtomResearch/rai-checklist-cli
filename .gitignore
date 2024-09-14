@@ -40,5 +40,3 @@ ENV/
 # Example generated markdown files 
 # examples/
 
-# Ignore other output files unless needed
-test_checklist.md
