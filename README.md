@@ -8,9 +8,9 @@ A command-line tool to easily add customizable responsible AI checklists to data
 
 This CLI compliments the RAI Auditor UI currently in development.
 
-![RAI Checklist UI Screenshot](./images/rai-checklist-ui-screenshot.png)
+![RAI Checklist UI Screenshot](https://github.com/ByteanAtomResearch/rai-checklist-cli/raw/main/images/rai-checklist-ui-screenshot.png)
 
-![RAI Checklist CLI Screenshot](./images/rai-checklist-cli-screenshot.png)
+<!-- ![RAI Checklist CLI Screenshot](./images/rai-checklist-cli-screenshot.png) -->
 
 ## Table of Contents
 
@@ -43,7 +43,7 @@ pip install rai-checklist-cli
 The basic syntax for using the CLI is:
 
 ```
-caiticli [OPTIONS]
+rai-checklist [OPTIONS]
 ```
 
 Options:
@@ -59,7 +59,7 @@ Options:
 Generate a markdown checklist:
 
 ```
-caiticli -o checklist.md -f md
+rai-checklist -o checklist.md -f md
 ```
 
 
