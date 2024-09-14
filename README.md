@@ -51,6 +51,27 @@ Generate a markdown checklist:
 rai-checklist -o checklist.md -f md
 ```
 
+or directly from a jupyter notebook? try:
+
+```
+# pull down the checklist use --upgrade for the latest 
+
+!pip install rai-checklist-cli
+# then creates a markdown file with the sections you care about
+
+!rai-checklist -o checklist.md -s project_motivation problem_definition -f md  
+
+# now read in the markdown content in your notebook
+
+with open('checklist.md', 'r') as f:
+    checklist_content = f.read()
+from IPython.display import Markdown, display
+
+# and finally display the checklist
+
+display(Markdown(checklist_content))
+
+```
 
 ## Checklist Sections
 
