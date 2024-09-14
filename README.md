@@ -12,17 +12,6 @@ This CLI compliments the RAI Auditor UI currently in development.
 
 <!-- ![RAI Checklist CLI Screenshot](./images/rai-checklist-cli-screenshot.png) -->
 
-## Table of Contents
-
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Examples](#examples)
-- [Checklist Sections](#checklist-sections)
-- [Customization](#customization)
-- [Contributing](#contributing)
-- [License](#license)
-
 ## Features
 
 - Generate customizable AI responsibility checklists

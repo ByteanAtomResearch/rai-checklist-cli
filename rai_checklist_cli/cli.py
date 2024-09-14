@@ -142,7 +142,11 @@ SECTION_FUNCTIONS = {
     'continual_improvement': continual_improvement_section,
 }
 
-def generate_checklist(sections):
+# Updated to handle the format argument
+def generate_checklist(sections, file_format):
+    if file_format != "md":
+        raise ValueError(f"Unsupported file format: {file_format}")
+    
     checklist = "# Responsible AI Checklist for LLM Projects\n\n"
     for section in sections:
         generate = SECTION_FUNCTIONS.get(section)
@@ -156,11 +160,15 @@ def main():
     parser = argparse.ArgumentParser(
         description='Generate a responsible AI checklist markdown file for LLM-based data science projects.'
     )
+    
+    # Output file argument
     parser.add_argument(
         '-o', '--output',
         default='responsible_ai_checklist_llm.md',
         help='The output markdown file name (default: responsible_ai_checklist_llm.md)'
     )
+    
+    # Sections argument
     parser.add_argument(
         '-s', '--sections',
         nargs='+',
@@ -168,15 +176,27 @@ def main():
         default=list(SECTION_FUNCTIONS.keys()),
         help='Specify which sections to include in the checklist'
     )
+    
+    # File format argument (currently supports only markdown)
+    parser.add_argument(
+        '-f', '--format',
+        choices=['md'],
+        default='md',
+        help='Specify the output format (currently only supports md for markdown)'
+    )
+    
     args = parser.parse_args()
 
     try:
-        checklist_content = generate_checklist(args.sections)
+        checklist_content = generate_checklist(args.sections, args.format)
         with open(args.output, 'w') as f:
             f.write(checklist_content)
         print(f'Responsible AI checklist for LLM projects generated and saved to {args.output}')
     except IOError as e:
         print(f"Error writing to file {args.output}: {e}", file=sys.stderr)
+        sys.exit(1)
+    except ValueError as ve:
+        print(f"Error: {ve}", file=sys.stderr)
         sys.exit(1)
 
 if __name__ == '__main__':
