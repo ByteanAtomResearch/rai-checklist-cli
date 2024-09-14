@@ -37,7 +37,7 @@ rai-checklist [OPTIONS]
 
 Options:
 
-- `--help`: Show help message and exit
+- `-h, --help`: Show help message and exit
 - `-w, --overwrite`: Overwrite existing output file
 - `-o, --output PATH`: Specify output file path
 - `-f, --format TEXT`: Specify output format (md, html, ipynb)
