@@ -32,4 +32,4 @@ jobs:
 
     # Step 4: Validate the checklist from the examples folder
     - name: Validate Checklist
-      run: python validate_checklist.py
+      run: python validate_checklist.py examples/checklist.yaml --project-type machine_learning

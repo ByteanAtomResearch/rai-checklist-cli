@@ -1,0 +1,16 @@
+default:
+  required_sections:
+    - 'Ethical considerations'
+    - 'Deployment Monitoring'
+
+machine_learning:
+  required_sections:
+    - 'Data Privacy'
+    - 'Model Bias'
+    - 'Deployment Monitoring'
+
+web_application:
+  required_sections:
+    - 'Security Considerations'
+    - 'Accessibility'
+    - 'Performance Optimization'
