@@ -1,0 +1,188 @@
+# Default Template for General LLM Projects
+default:
+  project_motivation:
+    title: "Project Motivation"
+    items:
+      - "What is the problem you want to solve?"
+      - "Which strategic goal does this project align with?"
+      - "Why is an LLM approach more suitable than traditional ML methods?"
+  problem_definition:
+    title: "Problem Definition"
+    items:
+      - "What specific task(s) do you want the LLM to perform?"
+      - "What input data will you provide to the LLM?"
+      - "What are the most relevant factors for the LLM to consider for your specific task?"
+      - "How many high-quality examples can you provide for few-shot learning or fine-tuning?"
+  ethical_considerations:
+    title: "Ethical Considerations"
+    items:
+      - "How will you assess and mitigate potential biases in the LLM's outputs?"
+      - "What measures will you implement to prevent generating harmful or toxic content?"
+      - "How will you ensure the LLM respects privacy and data protection regulations?"
+      - "Have we ensured that the model does not rely on variables or proxies for variables that are unfairly discriminatory?"
+      - "Have we communicated the shortcomings, limitations, and biases of the model to relevant stakeholders in ways that can be generally understood?"
+  performance_measurement:
+    title: "Performance Measurement"
+    items:
+      - "Do you have a baseline system or benchmark against which to compare?"
+      - "How will you measure the accuracy of the LLM's outputs?"
+      - "How will you measure the effectiveness of the LLM's outputs?"
+      - "What is the minimum level of accuracy (performance metric) you expect?"
+      - "What would an ideal solution look like?"
+      - "Are there reference solutions (e.g. research papers)?"
+  llm_specific_evaluation:
+    title: "LLM-Specific Evaluation Metrics"
+    items:
+      - "How well does the LLM's output align with the provided context (Faithfulness)?"
+      - "Are the generated responses pertinent to the given queries? (Answer relevancy)"
+      - "How effectively does the LLM retrieve relevant information from the context? (Context recall)"
+      - "How accurate is the information the LLM extracts from the context? (Context precision)"
+      - "How well does the LLM incorporate available context into its responses? (Context utilization)"
+      - "How accurately does the LLM identify and use named entities from the context? (Context entity recall)"
+  roadmap_timeline:
+    title: "Roadmap/Timeline"
+    items:
+      - "Are there any deadlines to be aware of?"
+      - "When do you need to see the first results or a proof of concept?"
+      - "What is the target date for a production-ready solution?"
+  contacts_stakeholders:
+    title: "Contacts/Stakeholders"
+    items:
+      - "Who is the product manager/owner or technical business lead?"
+      - "Who can provide access to necessary datasets and resources?"
+      - "Who are the domain experts who understand the context and current processes?"
+      - "Who will be responsible for prompt engineering and fine-tuning?"
+  collaboration:
+    title: "Collaboration"
+    items:
+      - "Establish regular update meetings between business and engineering teams"
+      - "Define critical participants and their roles"
+      - "Set up version control and issue tracking systems for prompts, fine-tuning scripts, and evaluation code"
+  user_research:
+    title: "User Research Aspects"
+    items:
+      - "Have you developed user personas for your LLM-based solution?"
+      - "Is there a user journey map that incorporates LLM interactions?"
+      - "What research has been done on your domain's user expectations for LLM-powered systems?"
+      - "Have we sought to address blindspots in the analysis through engagement with relevant stakeholders?"
+  end_user_definition:
+    title: "End User (Targeted Customers) Definition"
+    items:
+      - "Who are the primary end-users of the LLM-based solution?"
+      - "What are their primary goals when interacting with the system?"
+      - "What pain points do they experience with current solutions?"
+      - "What specific expectations do they have for an LLM-powered system?"
+  end_user_testing:
+    title: "End User Testing"
+    items:
+      - "Can users successfully achieve their goals using the LLM-based solution?"
+      - "How does the LLM-driven solution compare to previous methods regarding user satisfaction and task completion?"
+      - "Is there a feedback mechanism for users to report issues or suggest improvements?"
+      - "How will you incorporate user feedback into prompt refinement or model fine-tuning?"
+  deployment_monitoring:
+    title: "Deployment and Monitoring"
+    items:
+      - "How will you deploy the LLM-based solution (e.g., API, embedded model)?"
+      - "What monitoring systems will you implement to track performance and detect issues in production?"
+      - "How will you handle model updates and maintain consistency in outputs over time?"
+      - "Do we have a clear plan to monitor the model and its impacts after deployment?"
+      - "Have we discussed a plan for response if users are harmed by the results?"
+      - "Is there a way to turn off or roll back the model in production if necessary?"
+  continual_improvement:
+    title: "Continual Improvement"
+    items:
+      - "How frequently will you review and update prompts or fine-tuning data?"
+      - "What process will you use to validate and roll out improvements to the production system?"
+      - "How will you stay informed about advancements in LLM technology and incorporate them into your project?"
+      - "Is the process of generating the analysis well documented and reproducible if we discover issues in the future?"
+
+healthcare_ai:
+  project_motivation:
+    title: "Healthcare AI Project Motivation"
+    items:
+      - "What specific healthcare problem are you addressing?"
+      - "How does this project align with improving patient outcomes or healthcare efficiency?"
+      - "Why is an LLM approach more suitable than traditional healthcare informatics methods?"
+  ethical_considerations:
+    title: "Healthcare AI Ethical Considerations"
+    items:
+      - "How will you ensure patient data privacy and comply with HIPAA regulations?"
+      - "What measures will you take to prevent biases in diagnosis or treatment recommendations?"
+      - "How will you handle potential errors or inconsistencies in medical advice generated by the LLM?"
+
+
+# Template for Financial AI Projects
+financial_ai:
+  project_motivation:
+    title: "Financial AI Project Motivation"
+    items:
+      - "What financial problem or opportunity does this project target?"
+      - "How does this align with your organization's financial goals?"
+      - "Why is an LLM more suitable than traditional financial algorithms?"
+  ethical_considerations:
+    title: "Financial AI Ethical Considerations"
+    items:
+      - "How will you prevent bias in financial decision-making (e.g., loans, credit scoring)?"
+      - "What measures will you take to ensure transparency in loan approval or investment decisions?"
+      - "How will you comply with financial regulations like GDPR or CCPA?"
+  problem_definition:
+    title: "Financial AI Problem Definition"
+    items:
+      - "What financial data will be used to train the model?"
+      - "How will data from different sources (e.g., market data, client data) be integrated?"
+      - "What financial benchmarks or metrics will be used to assess model performance?"
+  deployment_monitoring:
+    title: "Financial AI Deployment and Monitoring"
+    items:
+      - "How will you ensure the model complies with financial regulations post-deployment?"
+      - "What measures are in place to address fraudulent behavior or biases in financial predictions?"
+
+# Template for Customer Service Chatbots
+customer_service_ai:
+  project_motivation:
+    title: "Customer Service Chatbot Project Motivation"
+    items:
+      - "What customer service problem are you aiming to solve with an LLM?"
+      - "How will this chatbot enhance the customer experience?"
+      - "Why is an LLM-based chatbot more efficient than traditional customer service methods?"
+  ethical_considerations:
+    title: "Customer Service AI Ethical Considerations"
+    items:
+      - "How will you ensure the chatbot respects customer privacy and data protection laws?"
+      - "What measures are in place to prevent the chatbot from providing incorrect or harmful information?"
+  problem_definition:
+    title: "Customer Service AI Problem Definition"
+    items:
+      - "What customer queries or tasks will the LLM-based chatbot be responsible for?"
+      - "How will you measure the chatbot's success in handling customer interactions?"
+      - "What datasets (e.g., past customer queries) will be used to train the chatbot?"
+  deployment_monitoring:
+    title: "Customer Service AI Deployment and Monitoring"
+    items:
+      - "How will you monitor the chatbot's performance and customer satisfaction?"
+      - "What is your plan for updating the chatbot as customer needs evolve?"
+
+# Template for Educational AI Projects
+education_ai:
+  project_motivation:
+    title: "Educational AI Project Motivation"
+    items:
+      - "What specific educational problem or opportunity does this project address?"
+      - "How will this AI improve learning outcomes for students?"
+      - "Why is an LLM approach more suitable than traditional educational tools?"
+  ethical_considerations:
+    title: "Educational AI Ethical Considerations"
+    items:
+      - "How will you ensure the AI respects student privacy and complies with educational regulations?"
+      - "What measures will you take to prevent bias in educational content delivery?"
+  problem_definition:
+    title: "Educational AI Problem Definition"
+    items:
+      - "What specific educational tasks or assessments will the AI perform?"
+      - "How will you integrate curriculum data into the model?"
+      - "How will you ensure the AI supports diverse learning styles?"
+  deployment_monitoring:
+    title: "Educational AI Deployment and Monitoring"
+    items:
+      - "How will you track the AI’s impact on student performance?"
+      - "What measures are in place to address inaccuracies or biases in educational recommendations?"
