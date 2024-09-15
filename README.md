@@ -182,7 +182,7 @@ The default checklist includes the following stages of the AI/ML lifecycle:
 
 You can customize the checklist by creating a YAML or JSON file with your desired sections and items. Use the `-l` or `--checklist` option to specify your custom checklist file when running the CLI.
 
-For more information on creating custom checklists, please refer to the [documentation](https://github.com/::GITHUB_USERNAME::/rai-checklist-cli/wiki/Custom-Checklists).
+For more information on creating custom checklists, please refer to the [documentation](https://github.com/ByteanAtomResearch/rai-checklist-cli/wiki/Custom-Checklists).
 
 ## Contributing
 
