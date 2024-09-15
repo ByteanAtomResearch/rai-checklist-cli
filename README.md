@@ -46,8 +46,10 @@ Options:
 - `-h, --help`: Show help message and exit
 - `-w, --overwrite`: Overwrite existing output file
 - `-o, --output PATH`: Specify output file path
-- `-f, --format TEXT`: Specify output format (md, html, ipynb)
+- `-f, --format TEXT`: Specify output format (md, yaml, json)
 - `-l, --checklist PATH`: Path to custom checklist file
+- `--project-type TEXT`: Specify project type for validation (default, machine_learning, web_application, etc.)
+- `--config PATH`: Path to the configuration file for validation
 
 ## Examples
 
@@ -69,32 +71,15 @@ Generate a JSON checklist:
 rai-checklist -o checklist.json -f json
 ```
 
+Validate a checklist for a machine learning project:
 
-or directly from a jupyter notebook (`.md`)? try:
-
-```python
-# pull down the checklist use --upgrade for the latest 
-
-!pip install rai-checklist-cli
-# then creates a markdown file with the sections you care about
-
-!rai-checklist -o checklist.md -s project_motivation problem_definition -f md  
-
-# now read in the markdown content in your notebook
-
-with open('checklist.md', 'r') as f:
-    checklist_content = f.read()
-from IPython.display import Markdown, display
-
-# and finally display the checklist
-
-display(Markdown(checklist_content))
-
+```
+rai-checklist -o checklist.yaml -f yaml --project-type machine_learning
 ```
 
 ## Integration into CI/CD Pipelines
 
-You can leverage the **YAML** or **JSON** output formats to automate responsible AI checks in your CI/CD pipelines, ensuring ethical and performance guidelines are met before deployment.
+You can leverage the YAML or JSON output formats to automate responsible AI checks in your CI/CD pipelines, ensuring ethical and performance guidelines are met before deployment.
 
 ## Example GitHub Action:
 
@@ -219,8 +204,8 @@ We're grateful for the open-source community and the valuable resources that hav
 **Note:** This project is currently in development. Features and documentation may be incomplete or subject to change.
 
 TODO:
-- [ ] Complete the documentation for custom checklists
-- [ ] Add more examples and use cases
+- [x] Complete the documentation for custom checklists
+- [x] Add more examples and use cases
 - [ ] Include frontend-UI (see screenshot)
-- [ ] Set up continuous integration and testing
-- [ ] Add detailed contribution guidelines
+- [x] Set up continuous integration and testing
+- [x] Add detailed contribution guidelines
