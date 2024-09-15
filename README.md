@@ -73,9 +73,9 @@ display(Markdown(checklist_content))
 
 ```
 
-## Checklist Sections
+## Stages
 
-The default checklist includes the following sections:
+The default checklist includes the following stages:
 
 - Project Motivation
 - Problem Definition
