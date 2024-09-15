@@ -1,0 +1,39 @@
+name: Publish Python Package to PyPI
+
+on:
+  push:
+    tags:
+      - "v*.*.*"  # This triggers the workflow when a tag like v1.0.0 is pushed
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Checkout the repository
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    # Step 2: Set up Python
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    # Step 3: Install build tools
+    - name: Install dependencies
+      run: |
+        pip install --upgrade setuptools wheel twine
+
+    # Step 4: Build the package
+    - name: Build package
+      run: |
+        python setup.py sdist bdist_wheel
+
+    # Step 5: Publish to PyPI
+    - name: Publish package to PyPI
+      env:
+        TWINE_USERNAME: "__token__" # Always set to __token__ when using an API token
+        TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+      run: |
+        twine upload dist/*
