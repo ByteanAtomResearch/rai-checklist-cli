@@ -32,16 +32,4 @@ jobs:
 
     # Step 4: Validate the checklist from the examples folder
     - name: Validate Checklist
-      run: |
-        python -c "
-import yaml
-with open('examples/checklist.yaml') as f:
-    checklist = yaml.safe_load(f)
-    required_sections = ['Ethical considerations', 'Deployment Monitoring']
-    missing_sections = [s for s in required_sections if s not in checklist['sections']]
-    if missing_sections:
-        print(f'Missing required sections: {missing_sections}')
-        exit(1)
-    else:
-        print('All required sections are present.')
-        "
+      run: python validate_checklist.py
