@@ -37,7 +37,7 @@ rai-checklist [OPTIONS]
 
 Options:
 
-- `--help`: Show help message and exit
+- `-h, --help`: Show help message and exit
 - `-w, --overwrite`: Overwrite existing output file
 - `-o, --output PATH`: Specify output file path
 - `-f, --format TEXT`: Specify output format (md, html, ipynb)
@@ -73,9 +73,9 @@ display(Markdown(checklist_content))
 
 ```
 
-## Checklist Sections
+## Stages
 
-The default checklist includes the following sections:
+The default checklist includes the following stages:
 
 - Project Motivation
 - Problem Definition

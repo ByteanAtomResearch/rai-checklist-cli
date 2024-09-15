@@ -6,8 +6,11 @@ __pycache__/
 # Distribution / packaging
 .Python
 build/
+develop-eggs/
 dist/
+eggs/
 *.egg-info/
+.installed.cfg
 *.egg
 
 # Unit test / coverage reports
@@ -31,6 +34,7 @@ pip-delete-this-directory.txt
 venv/
 env/
 ENV/
+rai-venv/
 
 # Editors and IDEs
 .vscode/
