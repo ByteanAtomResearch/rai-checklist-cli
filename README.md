@@ -100,7 +100,7 @@ You can leverage the **YAML** or **JSON** output formats to automate responsible
 
 Here's how you can use the rai-checklist-cli in GitHub Actions to automatically validate your AI project's responsible AI checklist.
 
-Create a .github/workflows/ai-responsibility-check.yml file with the following content:
+Create a `.github/workflows/ai-responsibility-check.yml` file with the following content:
 
 ```yaml
 name: Responsible AI Checklist CI
