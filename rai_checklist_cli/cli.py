@@ -3,15 +3,38 @@ import sys
 import json
 import yaml
 from pathlib import Path
+import pkg_resources
 
 class TemplateManager:
-    def __init__(self, template_file):
-        self.template_file = template_file
+    def __init__(self, template_file=None):
+        self.template_file = self._find_template_file(template_file)
         self.templates = self.load_templates()
 
+    def _find_template_file(self, custom_path=None):
+        if custom_path and Path(custom_path).is_file():
+            return custom_path
+        
+        try:
+            # Try to find the file using pkg_resources
+            return pkg_resources.resource_filename('rai_checklist_cli', 'templates.yaml')
+        except ImportError:
+            # Fallback to looking in the current working directory
+            local_path = Path.cwd() / 'templates.yaml'
+            if local_path.is_file():
+                return str(local_path)
+        
+        raise FileNotFoundError("Unable to locate the templates.yaml file. Please ensure it's installed with the package or provide a custom path.")
+
     def load_templates(self):
-        with open(self.template_file, 'r') as f:
-            return yaml.safe_load(f)
+        try:
+            with open(self.template_file, 'r') as f:
+                return yaml.safe_load(f)
+        except FileNotFoundError:
+            print(f"Error: Template file not found at {self.template_file}", file=sys.stderr)
+            sys.exit(1)
+        except yaml.YAMLError as e:
+            print(f"Error parsing the template file: {e}", file=sys.stderr)
+            sys.exit(1)
 
     def get_template(self, template_name):
         return self.templates.get(template_name, self.templates['default'])
@@ -119,7 +142,12 @@ def focus_on_section(templates, selected_template, selected_section):
 
 def main():
     # Initialize the TemplateManager to manage templates
-    template_manager = TemplateManager(Path(__file__).parent / 'templates.yaml')
+    try:
+        template_manager = TemplateManager()
+    except FileNotFoundError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        print("You can specify a custom template file using the --template-file option.", file=sys.stderr)
+        sys.exit(1)
     
     # Setup ArgumentParser for CLI
     parser = argparse.ArgumentParser(
@@ -132,6 +160,9 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
     
+    # Add a global option for specifying a custom template file
+    parser.add_argument('--template-file', help='Path to a custom template file')
+
     # Create subparsers for various commands
     subparsers = parser.add_subparsers(dest='command', help='Available commands')
 
@@ -199,6 +230,14 @@ def main():
 
     # Parse the arguments provided by the user
     args = parser.parse_args()
+
+    # If a custom template file is specified, reinitialize the TemplateManager
+    if args.template_file:
+        try:
+            template_manager = TemplateManager(args.template_file)
+        except FileNotFoundError as e:
+            print(f"Error: {e}", file=sys.stderr)
+            sys.exit(1)
 
     # Handle the create-template command
     if args.command == 'create-template':
