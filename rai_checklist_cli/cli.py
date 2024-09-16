@@ -87,9 +87,41 @@ def create_custom_template(template_manager):
 
     template_manager.save_template(template_name, template_data)
 
+# Fuunction to load templates from templates.yaml
+def load_templates(template_file='templates.yaml'):
+    with open(template_file, 'r') as f:
+        templates = yaml.safe_load(f)
+    return templates
+
+# function to list templates and sections
+def display_available_templates(templates):
+    print("Available Templates and Sections:")
+    for template_name, sections in templates.items():
+        print(f"Template: {template_name}")
+        for section_name, section_content in sections.items():
+            print(f"  - Section: {section_content['title']}")
+
+# focus on sepcific section
+def focus_on_section(templates, selected_template, selected_section):
+    if selected_template not in templates:
+        print(f"Template '{selected_template}' not found.")
+        return
+
+    template = templates[selected_template]
+    if selected_section not in template:
+        print(f"Section '{selected_section}' not found in template '{selected_template}'.")
+        return
+
+    section = template[selected_section]
+    print(f"Focused Section: {section['title']}")
+    for item in section['items']:
+        print(f"- {item}")
+
 def main():
+    # Initialize the TemplateManager to manage templates
     template_manager = TemplateManager(Path(__file__).parent / 'templates.yaml')
     
+    # Setup ArgumentParser for CLI
     parser = argparse.ArgumentParser(
         description='Responsible AI Checklist CLI for LLM Projects',
         epilog='Examples:\n'
@@ -100,9 +132,10 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
     
+    # Create subparsers for various commands
     subparsers = parser.add_subparsers(dest='command', help='Available commands')
 
-    # Generate checklist command
+    # Subcommand to generate checklists
     generate_parser = subparsers.add_parser('generate', 
         help='Generate a responsible AI checklist',
         description='Generate a customizable responsible AI checklist for LLM projects'
@@ -135,26 +168,56 @@ def main():
         help='Specify which sections to include (default: all sections in the template)'
     )
 
-    # Create custom template command
+    # Subcommand to create a custom template
     create_parser = subparsers.add_parser('create-template', 
         help='Create a custom checklist template',
         description='Interactively create a custom checklist template and save it for future use'
     )
 
+    # Subcommand to list all available templates and sections
+    list_parser = subparsers.add_parser('list-templates', 
+        help='List all available templates and sections',
+        description='List the available templates and their respective sections'
+    )
+
+    # Subcommand to focus on a specific section in a template
+    focus_parser = subparsers.add_parser('focus', 
+        help='Focus on a specific section in a template',
+        description='Focus on and display a specific section from a selected template'
+    )
+    focus_parser.add_argument(
+        '-t', '--template',
+        choices=template_manager.get_available_templates(),
+        default='default',
+        help='Specify the template to use (default: %(default)s)'
+    )
+    focus_parser.add_argument(
+        '-s', '--section',
+        required=True,
+        help='Specify the section to focus on'
+    )
+
+    # Parse the arguments provided by the user
     args = parser.parse_args()
 
+    # Handle the create-template command
     if args.command == 'create-template':
         create_custom_template(template_manager)
+
+    # Handle the generate command
     elif args.command == 'generate':
         if not args.output.endswith(f".{args.format}"):
             args.output += f".{args.format}"
         
+        # Get the selected template
         template = template_manager.get_template(args.template)
         
+        # If no sections are specified, include all sections
         if args.sections is None:
             args.sections = list(template.keys())
         
         try:
+            # Generate the checklist based on the template and format
             checklist_content = generate_checklist(template, args.sections, args.format)
             with open(args.output, 'w') as f:
                 f.write(checklist_content)
@@ -168,6 +231,18 @@ def main():
         except Exception as ex:
             print(f"An unexpected error occurred: {ex}", file=sys.stderr)
             sys.exit(1)
+
+    # Handle the list-templates command
+    elif args.command == 'list-templates':
+        templates = template_manager.templates
+        display_available_templates(templates)
+
+    # Handle the focus command
+    elif args.command == 'focus':
+        templates = template_manager.templates
+        focus_on_section(templates, args.template, args.section)
+
+    # If no valid command is provided, print the help message
     else:
         parser.print_help()
 
