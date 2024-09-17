@@ -112,21 +112,35 @@ def generate_command(args, template_manager):
     if not args.output.endswith(f".{args.format}"):
         args.output += f".{args.format}"
     
-    template = template_manager.get_template(args.template)
-    
-    if args.sections is None:
-        args.sections = list(template.keys())
-    
     try:
+        template = template_manager.get_template(args.template)
+        logger.debug(f"Retrieved template: {args.template}")
+        
+        if args.sections is None:
+            args.sections = list(template.keys())
+        logger.debug(f"Sections to include: {args.sections}")
+        
         checklist_content = generate_checklist(template, args.sections, args.format)
+        logger.debug("Checklist content generated successfully")
+        
         with open(args.output, 'w') as f:
             f.write(checklist_content)
         logger.info(f'Responsible AI checklist for LLM projects generated and saved to {args.output}')
+    except KeyError as e:
+        logger.error(f"Error: Missing key in template - {e}")
+        logger.debug("Template structure:", exc_info=True)
+        sys.exit(1)
+    except AttributeError as e:
+        logger.error(f"Error: Missing attribute - {e}")
+        logger.debug("Ensure all required fields are present in the template", exc_info=True)
+        sys.exit(1)
     except (IOError, ValueError) as e:
         logger.error(f"Error: {e}")
+        logger.debug("", exc_info=True)
         sys.exit(1)
     except Exception as ex:
         logger.error(f"An unexpected error occurred: {ex}")
+        logger.debug("", exc_info=True)
         sys.exit(1)
 
 if __name__ == '__main__':
