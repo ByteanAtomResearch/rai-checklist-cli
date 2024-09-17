@@ -202,13 +202,3 @@ healthcare_ai:
     - Why is an LLM approach more suitable than traditional healthcare informatics
       methods?
     title: Healthcare AI Project Motivation
-python -m rai_checklist_cli.cli --list-templates:
-  continuous integration:
-    items:
-    - '- weights and biases'
-    title: CI/CD
-  nobles-list:
-    items:
-    - '- agile audit'
-    - '- implement sonarqube'
-    title: cool ai project

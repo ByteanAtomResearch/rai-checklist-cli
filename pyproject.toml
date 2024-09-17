@@ -1,3 +1,6 @@
 [build-system]
 requires = ["setuptools>=42", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[tool.poetry]
+include = ["rai_checklist_cli/templates.yaml"]

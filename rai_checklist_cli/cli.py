@@ -87,9 +87,14 @@ def main(args=None):
         logger.setLevel(logging.DEBUG)
 
     try:
-        template_manager = TemplateManager(parsed_args.template_file) if parsed_args.template_file else TemplateManager()
+        template_manager = TemplateManager(parsed_args.template_file)
     except FileNotFoundError as e:
-        logger.error(f"Error: {e}")
+        logger.error(f"Error loading templates: {e}")
+        logger.debug("Make sure the templates.yaml file is present in the package or provide a valid custom template file.")
+        sys.exit(1)
+    except Exception as e:
+        logger.error(f"Unexpected error loading templates: {e}")
+        logger.debug("", exc_info=True)
         sys.exit(1)
 
     if parsed_args.command == 'create-template':
