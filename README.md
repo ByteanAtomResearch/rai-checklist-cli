@@ -32,6 +32,7 @@ Install the Responsible AI Checklist CLI using pip:
 ```bash
 pip install rai-checklist-cli
 ```
+Note: that PyYAML is a dependency. You may have to install that separately. Known issue.
 
 ## Usage
 

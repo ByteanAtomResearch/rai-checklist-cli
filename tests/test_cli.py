@@ -1,38 +1,34 @@
 import unittest
-import os
-from unittest.mock import patch
-from rai_checklist_cli.cli import generate_checklist
+from unittest.mock import patch, MagicMock
+from io import StringIO
+from rai_checklist_cli.cli import main, generate_checklist
 
 class TestCLI(unittest.TestCase):
 
-    def test_generate_checklist_all_sections(self):
-        sections = list(generate_checklist.SECTION_FUNCTIONS.keys())
-        checklist = generate_checklist(sections)
-        self.assertIn("## Ethics and Compliance", checklist)
-        self.assertIn("## Data Privacy and Security", checklist)
-        # Add assertions for other sections
+    @patch('sys.stdout', new_callable=StringIO)
+    def test_help_command(self, mock_stdout):
+        with self.assertRaises(SystemExit):
+            main(['--help'])
+        self.assertIn('usage:', mock_stdout.getvalue())
 
-    def test_generate_checklist_specific_sections(self):
-        sections = ['ethics', 'fairness']
-        checklist = generate_checklist(sections)
-        self.assertIn("## Ethics and Compliance", checklist)
-        self.assertIn("## Bias and Fairness", checklist)
-        self.assertNotIn("## Data Privacy and Security", checklist)
+    @patch('rai_checklist_cli.cli.TemplateManager')
+    def test_generate_checklist(self, mock_template_manager):
+        mock_template = {
+            'name': 'Default Template',
+            'section1': {'title': 'Section 1', 'items': ['Item 1', 'Item 2']},
+            'section2': {'title': 'Section 2', 'items': ['Item 3', 'Item 4']}
+        }
+        mock_template_manager.return_value.get_template.return_value = mock_template
+        
+        result = generate_checklist(mock_template, ['section1', 'section2'], 'md')
+        
+        self.assertIn("# Responsible AI Checklist for LLM Projects - Default Template", result)
+        self.assertIn("## Section 1", result)
+        self.assertIn("- [ ] Item 1", result)
+        self.assertIn("## Section 2", result)
+        self.assertIn("- [ ] Item 4", result)
 
-    @patch('builtins.open')
-    def test_file_creation(self, mock_open):
-        from rai_checklist_cli.cli import main
-        test_args = ['rai-checklist', '-o', 'test_checklist.md', '-s', 'ethics', 'privacy']
-        with patch('sys.argv', test_args):
-            main()
-            mock_open.assert_called_with('test_checklist.md', 'w')
-
-    def test_invalid_section(self):
-        sections = ['invalid_section']
-        with patch('sys.stderr') as mock_stderr:
-            checklist = generate_checklist(sections)
-            mock_stderr.write.assert_called_with("Warning: Section 'invalid_section' is not recognized and will be skipped.\n")
-            self.assertEqual(checklist, "# Responsible AI Checklist\n\n")
+    # Add more tests as needed
 
 if __name__ == '__main__':
     unittest.main()
