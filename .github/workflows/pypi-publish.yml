@@ -23,7 +23,8 @@ jobs:
     # Step 3: Install build tools
     - name: Install dependencies
       run: |
-        pip install --upgrade setuptools wheel twine
+        python -m pip install --upgrade pip
+        pip install setuptools wheel twine
 
     # Step 4: Build the package
     - name: Build package
@@ -31,9 +32,18 @@ jobs:
         python setup.py sdist bdist_wheel
 
     # Step 5: Publish to PyPI
-    - name: Publish package to PyPI
+    - name: Publish package to Test PyPI
+      if: startsWith(github.ref, 'refs/tags/')
       env:
-        TWINE_USERNAME: "__token__" # Always set to __token__ when using an API token
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.TEST_PYPI_PASSWORD }}
+      run: |
+        twine upload --repository testpypi dist/*
+
+    - name: Publish package to PyPI
+      if: startsWith(github.ref, 'refs/tags/')
+      env:
+        TWINE_USERNAME: __token__
         TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
       run: |
         twine upload dist/*

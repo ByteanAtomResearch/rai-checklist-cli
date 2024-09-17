@@ -29,7 +29,4 @@ setup(
         'tqdm',
     ],
     include_package_data=True,
-    package_data={
-        'rai_checklist_cli': ['templates.yaml'],
-    },
 )
