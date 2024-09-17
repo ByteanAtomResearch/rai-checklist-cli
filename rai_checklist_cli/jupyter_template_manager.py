@@ -1,9 +1,13 @@
+import importlib.resources
 import yaml
 import ipywidgets as widgets
 from IPython.display import display
 
 class JupyterTemplateManager:
-    def __init__(self, template_file='rai_checklist_cli/templates.yaml'):
+    def __init__(self, template_file=None):
+        if template_file is None:
+            with importlib.resources.path('rai_checklist_cli', 'templates.yaml') as p:
+                template_file = str(p)
         self.template_file = template_file
         self.templates = self.load_templates()
 
