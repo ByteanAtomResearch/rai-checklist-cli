@@ -3,33 +3,37 @@
 name: Responsible AI Checklist CI
 
 on:
+  workflow_dispatch:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    paths:
+      - 'rai_checklist_cli/**'
+      - '.github/workflows/ai-responsibility-check.yml'
 
 jobs:
   responsibility_checklist:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Checkout repository
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    # Step 2: Set up Python environment
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.x'
+        python-version: '3.9'
 
-    # Step 3: Install necessary dependencies
     - name: Install dependencies
       run: |
-        pip install pyyaml
+        python -m pip install --upgrade pip
+        pip install .
 
-    # Step 4: Validate the checklist from the examples folder
-    - name: Validate Checklist
-      run: python validate_checklist.py examples/checklist.yaml --project-type machine_learning
+    - name: Generate Responsibility Checklist
+      run: |
+        rai-checklist generate -t default -o responsibility_checklist.md
+        cat responsibility_checklist.md
+
+    - name: Upload Checklist Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: responsibility-checklist
+        path: responsibility_checklist.md
