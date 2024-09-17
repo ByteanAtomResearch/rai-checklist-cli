@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="rai-checklist-cli",
-    version="0.5.11",
+    version="0.5.12",
     author="Noble Ackerson",
     author_email="noblel@byteanatom.com",
     description="A CLI tool to generate responsible AI checklists for machine learning projects.",
@@ -18,7 +18,6 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.6',
     entry_points={
         'console_scripts': [
             'rai-checklist=rai_checklist_cli.cli:main',
@@ -28,9 +27,6 @@ setup(
         'pyyaml',
         'tqdm',
     ],
-    extras_require={
-        'test': ['pytest'],
-    },
     include_package_data=True,
     package_data={
         'rai_checklist_cli': ['templates.yaml'],
