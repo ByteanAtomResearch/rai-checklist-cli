@@ -1,6 +1,10 @@
+import sys
+import os
 import unittest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 from io import StringIO
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from rai_checklist_cli.cli import main, generate_checklist
 
 class TestCLI(unittest.TestCase):

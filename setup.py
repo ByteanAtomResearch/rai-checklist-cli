@@ -28,6 +28,9 @@ setup(
         'pyyaml',
         'tqdm',
     ],
+    extras_require={
+        'test': ['pytest'],
+    },
     include_package_data=True,
     package_data={
         'rai_checklist_cli': ['templates.yaml'],
