@@ -8,12 +8,12 @@ def generate_section(section_data):
         section += f"- [ ] {item}\n"
     return section + "\n"
 
-def generate_checklist(template: Dict[str, Dict[str, Union[str, List[str]]]], sections: List[str], file_format: str) -> str:
+def generate_checklist(template: Dict[str, Dict[str, Union[str, List[str]]]], sections: List[str], file_format: str, title: str = "Responsible AI Checklist for LLM Projects") -> str:
     if file_format not in ["md", "yaml", "json"]:
         raise ValueError(f"Unsupported file format: {file_format}")
     
     if file_format == "md":
-        checklist = f"# Responsible AI Checklist for LLM Projects - {template['name']}\n\n"
+        checklist = f"# {title}\n\n"
         for section in sections:
             if section in template:
                 checklist += generate_section(template[section])
