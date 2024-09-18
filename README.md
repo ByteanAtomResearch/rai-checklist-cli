@@ -4,26 +4,28 @@
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Python Versions](https://img.shields.io/pypi/pyversions/rai-checklist-cli.svg)](https://pypi.org/project/rai-checklist-cli)
 
-A command-line tool to easily add customizable responsible AI checklists to data science, Generative AI, or traditional machine learning projects. This tool helps ensure that AI projects adhere to ethical guidelines and best practices throughout their lifecycle. 
+A command-line tool to easily add customizable responsible AI checklists to data science, Generative AI, or traditional machine learning projects. 
 
-This CLI compliments the RAI Auditor UI currently in development.
+**Why am I making this tool public?**
+
+This tool helps ensure that ML/AI projects adhere to ethical guidelines and best practices throughout their lifecycle. Delivering AI models responsibly also helps with compliance, data trust, and robustness. In my day-to-day I use this tool to:
+
+- Assist in adhering to legal and regulatory standards.
+- Build trust with users by ensuring transparency and accountability. 
+- Ensure Ai systems are safe and secure from vulnerabilities.
+
+This CLI compliments the RAI Auditor SaaS service in active in user validation, design and development.
 
 ![RAI Checklist UI Screenshot](https://github.com/ByteanAtomResearch/rai-checklist-cli/raw/main/images/rai-checklist-ui-screenshot.png)
 
-<!-- ![RAI Checklist CLI Screenshot](./images/rai-checklist-cli-screenshot.png) -->
-
-## Features
+## Current Features
 
 - Generate customizable AI responsibility checklists
 - Support for various output formats: Markdown (`.md`), YAML (`.yaml`), JSON (`.json`).
-- Easily integrate into existing projects or CI/CD pipelines.
-- Customizable checklist sections
+- You can now generate checklists in YAML and JSON formats, making it easy to integrate into CI/CD pipelines. See also the GitHub Action template in the repo to automate your responsible AI checks.
+- Customizable checklist sections. You can consider using this for your data privacy compliance needs for example.
 - Validation of ethical and technical aspects in CI/CD pipelines using YAML or JSON checklists.
 
-## New Features Added:
-
-- **Support for YAML and JSON:** You can now generate checklists in YAML and JSON formats, making it easy to integrate into CI/CD pipelines.
-- **CI/CD Integration Example:** Added GitHub Actions template to automate responsible AI checks.
 
 ## Installation
 
@@ -77,6 +79,8 @@ Validate a checklist for a machine learning project:
 ```
 rai-checklist -o checklist.yaml -f yaml --project-type machine_learning
 ```
+
+See also, example notebook for quick EDA use cases.
 
 ## Integration into CI/CD Pipelines
 
