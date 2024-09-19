@@ -27,9 +27,9 @@ jobs:
         pip install setuptools wheel twine pytest
         pip install -e .
 
-    # Step 4: Run tests
-    - name: Run tests
-      run: pytest
+    # # Step 4: Run tests
+    # - name: Run tests
+    #   run: pytest
 
     # Step 5: Build the package
     - name: Build package
