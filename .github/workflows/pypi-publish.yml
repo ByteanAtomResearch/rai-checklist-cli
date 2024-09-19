@@ -31,7 +31,7 @@ jobs:
           pip install pylint 
 
       - name: Lint with pylint
-        run: pylint rai-checklist-cli
+        run: pylint rai_checklist_cli
       - name: Run tests with pytest
         run: pytest
 
