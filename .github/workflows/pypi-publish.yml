@@ -28,6 +28,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt  # Install from requirements.txt
           pip install -e .  # Install your package in editable mode for testing
+          pip install flake8  # Ensure flake8 is installed
 
       - name: Lint with flake8
         run: flake8 .
