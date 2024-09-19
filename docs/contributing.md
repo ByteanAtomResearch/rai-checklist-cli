@@ -8,5 +8,3 @@ Contributions are welcome! Here's how you can contribute to the project:
 4. Commit your changes (`git commit -am 'Add some feature'`)
 5. Push to the branch (`git push origin feature/your-feature-name`)
 6. Create a new Pull Request
-
-Please make sure to update tests as appropriate and adhere to the [code of conduct](CODE_OF_CONDUCT.md).

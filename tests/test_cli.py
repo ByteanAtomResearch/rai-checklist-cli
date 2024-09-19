@@ -3,6 +3,8 @@ import os
 import unittest
 from unittest.mock import patch
 from io import StringIO
+import subprocess
+
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from rai_checklist_cli.cli import main, generate_checklist
@@ -33,6 +35,34 @@ class TestCLI(unittest.TestCase):
         self.assertIn("- [ ] Item 4", result)
 
     # Add more tests as needed
+
+def run_command(command):
+    result = subprocess.run(command, capture_output=True, text=True)
+    print(f"Command: {' '.join(command)}")
+    print(f"Exit code: {result.returncode}")
+    print(f"Output:\n{result.stdout}")
+    print(f"Error:\n{result.stderr}")
+    print("-" * 50)
+    return result
+
+def test_cli():
+    commands = [
+        ["rai-checklist", "-o", "test_output.md"],
+        ["rai-checklist", "-o", "test_output.yaml", "-f", "yaml"],
+        ["rai-checklist", "-o", "test_output.json", "-f", "json"],
+        ["rai-checklist", "generate", "-o", "test_generate.md"],
+        ["rai-checklist", "list-templates"],
+        ["rai-checklist", "focus", "-t", "default", "-s", "data_collection"],
+    ]
+
+    for command in commands:
+        result = run_command(command)
+        assert result.returncode == 0, f"Command failed: {' '.join(command)}"
+
+    # Check if output files were created
+    for file in ["test_output.md", "test_output.yaml", "test_output.json", "test_generate.md"]:
+        assert os.path.exists(file), f"Output file not created: {file}"
+        os.remove(file)
 
 if __name__ == '__main__':
     unittest.main()

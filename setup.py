@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="rai-checklist-cli",
-    version="0.6.1",
+    version="0.6.2",
     author="Noble Ackerson",
     author_email="noblel@byteanatom.com",
     description="A CLI tool to generate responsible AI checklists for machine learning projects.",
