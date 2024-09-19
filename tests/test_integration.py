@@ -1,11 +1,12 @@
 # test_integration.py
+
 import subprocess
 import json
 import yaml
 
 def test_integration():
     # Generate a checklist using CLI
-    subprocess.run(["rai-checklist", "-o", "test_integration.json", "-f", "json"])
+    subprocess.run(["rai-checklist", "generate", "-o", "test_integration.json", "-f", "json"])
 
     # Load the generated checklist programmatically
     with open("test_integration.json", "r") as f:
