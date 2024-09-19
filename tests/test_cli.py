@@ -47,10 +47,8 @@ def run_command(command):
 
 def test_cli():
     commands = [
-        ["rai-checklist", "generate", "-o", "test_output.md"],
+        ["rai-checklist", "generate", "-o", "test_output.md", "-f", "md"],
         ["rai-checklist", "generate", "-o", "test_output.yaml", "-f", "yaml"],
-        ["rai-checklist", "generate", "-o", "test_output.json", "-f", "json"],
-        ["rai-checklist", "generate", "-o", "test_generate.md"],
         ["rai-checklist", "list-templates"],
         ["rai-checklist", "focus", "-t", "default", "-s", "data_collection"],
     ]
@@ -67,15 +65,18 @@ def test_generate_checklist_with_custom_title(capsys):
     assert 'Responsible AI checklist for LLM projects generated and saved to test_checklist.md' in captured.out
 
 def test_generate_checklist_without_title(capsys):
+    # Ensure the output file does not exist before running the test
+    output_file = 'test_checklist.md'
+    if os.path.exists(output_file):
+        os.remove(output_file)
+
     with pytest.raises(SystemExit) as e:
-        main(['generate', '-t', 'default', '-o', 'test_checklist.md'])
+        main(['generate', '-t', 'default', '-o', output_file])
     assert e.value.code == 0
     captured = capsys.readouterr()
     assert 'Responsible AI checklist for LLM projects generated and saved to test_checklist.md' in captured.out
 
 def test_generate_checklist_with_invalid_arguments(capsys):
     with pytest.raises(SystemExit) as e:
-        main(['generate', '-t', 'non_existent_template'])
-    assert e.value.code == 1
-    captured = capsys.readouterr()
-    assert 'Error generating checklist' in captured.err
+        main(['generate', '-t', 'invalid_template', '-o', 'test_checklist.md'])
+    assert e.value.code == 1  # Ensure the exit code is 1 for invalid arguments

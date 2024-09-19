@@ -31,8 +31,9 @@ class TemplateManager:
 
     def _load_default_templates(self):
         try:
-            with importlib.resources.path('rai_checklist_cli', 'templates.yaml') as template_path:
-                return self._load_from_file(template_path)
+            template_path = importlib.resources.files('rai_checklist_cli').joinpath('templates.yaml')
+            logger.debug(f"Loading default template from: {template_path}")
+            return self._load_from_file(template_path)
         except ImportError:
             logger.error("Unable to locate default templates.yaml in package")
             raise FileNotFoundError("Default templates.yaml not found in package")
@@ -50,3 +51,6 @@ class TemplateManager:
                 yaml.dump(self.templates, f)
         else:
             logger.warning("Cannot save template when using package resources.")
+
+    def get_available_sections(self, template):
+        return list(template.keys())

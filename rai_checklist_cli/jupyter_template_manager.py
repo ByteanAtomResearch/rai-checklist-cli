@@ -65,6 +65,9 @@ class JupyterTemplateManager:
         add_section_button.on_click(add_section)
         save_template_button.on_click(save_template)
 
+    def get_available_sections(self, template):
+        return list(template.keys())
+
 # Create an instance to use in the notebook
 template_manager = JupyterTemplateManager()
 
