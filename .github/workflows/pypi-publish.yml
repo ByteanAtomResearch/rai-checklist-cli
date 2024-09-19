@@ -1,53 +1,55 @@
-name: Publish Python Package to PyPI
+name: Publish Python Package
 
 on:
   push:
     tags:
-      - "v*.*.*"
+      - "v*.*.*"      # Trigger for stable releases (to PyPI)
+      - "v*.*.*-rc.*"  # Trigger for release candidates (to Test PyPI)
 
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.9', '3.10']  # Test on multiple Python versions
 
     steps:
-    # Step 1: Checkout the repository
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v3  # Update to latest version
 
-    # Step 2: Set up Python
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.9'
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4  # Update to latest version
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
 
-    # Step 3: Install build tools
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install setuptools wheel twine pytest
-        pip install -e .
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt  # Install from requirements.txt
+          pip install -e .  # Install your package in editable mode for testing
 
-    # Step 4: Run tests
-    - name: Run tests
-      run: pytest
+      - name: Lint with flake8
+        run: flake8 .
 
-    # Step 5: Build the package
-    - name: Build package
-      run: |
-        python setup.py sdist bdist_wheel
+      - name: Run tests with pytest
+        run: pytest
 
-    # Step 6: Publish to Test PyPI
-    - name: Publish to Test PyPI
-      env:
-        TWINE_USERNAME: __token__
-        TWINE_PASSWORD: ${{ secrets.TEST_PYPI_PASSWORD }}
-      run: |
-        twine upload --repository testpypi dist/*
+      - name: Build package
+        run: |
+          python setup.py sdist bdist_wheel
 
-    # Step 7: Publish to PyPI
-    - name: Publish to PyPI
-      env:
-        TWINE_USERNAME: __token__
-        TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-      run: |
-        twine upload dist/*
+      - name: Publish to Test PyPI
+        if: contains(github.ref, '-rc')  # Only for tags containing '-rc'
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.TEST_PYPI_PASSWORD }}  
+        run: twine upload --repository testpypi dist/*
+
+      - name: Publish to PyPI
+        # Only for tags NOT containing '-rc'
+        if: ${{ !contains(github.ref, '-rc') }}
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        run: twine upload dist/*
