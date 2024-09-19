@@ -79,7 +79,27 @@ def main(args=None):
         display_available_templates(template_manager.templates)
     elif parsed_args.command == 'focus':
         focus_on_section(template_manager.templates, parsed_args.template, parsed_args.section)
-    elif parsed_args.command == 'generate' or parsed_args.command is None:
+    elif parsed_args.command == 'generate':
+        template = template_manager.get_template(parsed_args.template)
+        sections = parsed_args.sections or list(template.keys())
+        checklist = generate_checklist(
+            template,
+            sections,
+            parsed_args.format,
+            title=parsed_args.title
+        )
+       
+        if not parsed_args.output.endswith(f".{parsed_args.format}"):
+            parsed_args.output += f".{parsed_args.format}"
+        
+        if Path(parsed_args.output).exists() and not parsed_args.overwrite:
+            logger.error(f"Output file {parsed_args.output} already exists. Use -w or --overwrite to overwrite.")
+            sys.exit(1)
+
+        with open(parsed_args.output, 'w') as f:
+            f.write(checklist)
+        logger.info(f'Responsible AI checklist for LLM projects generated and saved to {parsed_args.output}')
+    elif parsed_args.command is None:
         generate_command(parsed_args, template_manager)
     else:
         parser.print_help()
