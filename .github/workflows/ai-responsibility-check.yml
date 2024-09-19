@@ -30,7 +30,7 @@ jobs:
 
       - name: Generate Responsibility Checklist
         run: |
-          rai-checklist generate -t default -o responsibility_checklist.md
+          rai-checklist generate -t default -o responsibility_checklist.md --title "Responsible AI Checklist"
           cat responsibility_checklist.md
 
       - name: Upload Checklist Artifact

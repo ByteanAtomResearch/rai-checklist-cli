@@ -1,6 +1,6 @@
 import json
 import yaml
-from typing import Dict, Union, List
+from typing import Dict, Union, List, Optional
 
 def generate_section(section_data):
     section = f"## {section_data['title']}\n"
@@ -8,7 +8,18 @@ def generate_section(section_data):
         section += f"- [ ] {item}\n"
     return section + "\n"
 
-def generate_checklist(template: Dict[str, Dict[str, Union[str, List[str]]]], sections: List[str], file_format: str, title: str = "Responsible AI Checklist for LLM Projects") -> str:
+def generate_checklist(template: Dict[str, Dict[str, Union[str, List[str]]]], 
+                       sections: List[str], 
+                       file_format: str, 
+                       title: str = "Responsible AI Checklist for LLM Projects",
+                       custom_checklist: Optional[str] = None) -> str:
+    # Handle custom_checklist if provided
+    if custom_checklist:
+        # Load custom checklist and use it instead of the template
+        with open(custom_checklist, 'r') as file:
+            custom_template = yaml.safe_load(file)
+        template = custom_template
+    
     if file_format not in ["md", "yaml", "json"]:
         raise ValueError(f"Unsupported file format: {file_format}")
     
