@@ -4,10 +4,10 @@ import unittest
 from unittest.mock import patch
 from io import StringIO
 import subprocess
+import pytest
+from rai_checklist_cli.cli import main, generate_checklist
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-from rai_checklist_cli.cli import main, generate_checklist
 
 class TestCLI(unittest.TestCase):
 
@@ -66,3 +66,24 @@ def test_cli():
 
 if __name__ == '__main__':
     unittest.main()
+
+def test_generate_checklist_with_custom_title(capsys):
+    with pytest.raises(SystemExit) as e:
+        main(['generate', '-t', 'default', '-o', 'test_checklist.md', '--title', 'Custom Checklist Title'])
+    assert e.value.code == 0
+    captured = capsys.readouterr()
+    assert 'Responsible AI checklist for LLM projects generated and saved to test_checklist.md' in captured.out
+
+def test_generate_checklist_without_title(capsys):
+    with pytest.raises(SystemExit) as e:
+        main(['generate', '-t', 'default', '-o', 'test_checklist.md'])
+    assert e.value.code == 0
+    captured = capsys.readouterr()
+    assert 'Responsible AI checklist for LLM projects generated and saved to test_checklist.md' in captured.out
+
+def test_generate_checklist_with_invalid_arguments(capsys):
+    with pytest.raises(SystemExit) as e:
+        main(['generate', '-t', 'non_existent_template'])
+    assert e.value.code == 1
+    captured = capsys.readouterr()
+    assert 'Error generating checklist' in captured.err

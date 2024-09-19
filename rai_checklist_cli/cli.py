@@ -34,6 +34,7 @@ def main(args=None):
     generate_parser.add_argument('-o', '--output', default='responsible_ai_checklist_llm.md', help='The output file name (default: %(default)s)')
     generate_parser.add_argument('-f', '--format', choices=['md', 'yaml', 'json'], default='md', help='Specify the output format (default: %(default)s)')
     generate_parser.add_argument('-t', '--template', help='Specify which template to use (default: %(default)s)')
+    generate_parser.add_argument('--title', default="Responsible AI Checklist for LLM Projects", help='Specify a custom title for the checklist')
     generate_parser.add_argument('-s', '--sections', nargs='+', metavar='SECTION', help='Specify which sections to include (default: all sections in the template)')
     generate_parser.add_argument('-w', '--overwrite', action='store_true', help='Overwrite existing output file')
     generate_parser.add_argument('-l', '--checklist', help='Specify a custom checklist file to use')
@@ -82,13 +83,18 @@ def main(args=None):
     elif parsed_args.command == 'generate':
         template = template_manager.get_template(parsed_args.template)
         sections = parsed_args.sections or list(template.keys())
-        checklist = generate_checklist(
-            template,
-            sections,
-            parsed_args.format,
-            title=parsed_args.title
-        )
-       
+        try:
+            checklist = generate_checklist(
+                template,
+                sections,
+                parsed_args.format,
+                title=parsed_args.title
+            )
+        except AttributeError as e:
+            logger.error(f"Error generating checklist: {e}")
+            logger.debug("Make sure all required arguments are provided.")
+            sys.exit(1)
+        
         if not parsed_args.output.endswith(f".{parsed_args.format}"):
             parsed_args.output += f".{parsed_args.format}"
         
