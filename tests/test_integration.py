@@ -30,7 +30,7 @@ def test_integration():
                     content = f.read()
                 
                 if file_format == "md":
-                    assert "# Responsible AI Checklist for LLM Projects" in content
+                    assert "# Responsible AI Checklist for ML & AI Projects" in content
                     assert "## Problem Definition" in content
                     assert "## Ethical Considerations" in content
                 elif file_format == "yaml":
