@@ -187,10 +187,6 @@ Contributions are welcome! Here's how you can contribute to the project:
 
 Please make sure to update tests as appropriate and adhere to the [code of conduct](CODE_OF_CONDUCT.md).
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## Acknowledgments
 
 This project was inspired by and builds upon the work of several existing tools and individuals:
@@ -198,11 +194,21 @@ This project was inspired by and builds upon the work of several existing tools 
 * [Deon](https://deon.drivendata.org/) by [DrivenData](https://www.drivendata.org/): An ethics checklist for data scientists.
 * [CAITI AI Risk Library](https://github.com/byteanatom/caiti-ai-risk-library) by ByteanAtom Research: A comprehensive library for AI risk assessment.
 
-### Contributors
+### Citations
 
-* [Noble Ackerson](https://www.linkedin.com/in/noblea) : Project lead and main contributor.
+```markdown
+@software{noble2024raichecklist,
+  author = {Noble Ackerson}, 
+  title = {RAICheckList: A CLI Tool for Generating Responsible AI Checklists}, 
+  year = {2024},
+  url = {https://github.com/ByteanAtomResearch/rai-checklist-cli/},
+  version = {0.6.8}
+}
+```
 
-We're grateful for the open-source community and the valuable resources that have made this project possible.
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
