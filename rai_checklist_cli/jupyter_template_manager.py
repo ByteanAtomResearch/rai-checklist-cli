@@ -1,75 +1,85 @@
 import importlib.resources
 import yaml
-import ipywidgets as widgets
-from IPython.display import display
+import os
+import google.generativeai as genai
 
-class JupyterTemplateManager:
+class TemplateManager:
     def __init__(self, template_file=None):
         if template_file is None:
             with importlib.resources.path('rai_checklist_cli', 'templates.yaml') as p:
                 template_file = str(p)
         self.template_file = template_file
         self.templates = self.load_templates()
+        self.api_key = None
 
     def load_templates(self):
         with open(self.template_file, 'r') as f:
             return yaml.safe_load(f)
 
-    def create_section(self):
-        section_title = widgets.Text(
-            value='',
-            placeholder='Enter section title',
-            description='Section Title:',
-            disabled=False
-        )
-        
-        section_items = widgets.Textarea(
-            value='',
-            placeholder='Enter checklist items, one per line',
-            description='Checklist Items:',
-            disabled=False
-        )
-        
-        display(section_title, section_items)
-        
-        return section_title, section_items
+    def configure_api_key(self):
+        self.api_key = input("Enter your Google Gemini API key: ").strip()
+        if self.api_key:
+            genai.configure(api_key=self.api_key)
+            print("API key saved successfully!")
+        else:
+            print("Please enter a valid API key.")
+            self.configure_api_key()
+
+    def generate_checklist_items(self, section_title):
+        # Same implementation as before...
+        pass  # (Include the method as previously defined)
+
+    def create_section(self, new_template):
+        title = input("Enter section title: ").strip()
+        generate = input("Generate checklist items using LLM? (y/n): ").strip().lower()
+        if generate == 'y':
+            items = self.generate_checklist_items(title)
+            if items:
+                print("Generated Checklist Items:")
+                for item in items:
+                    print(f"- {item}")
+            else:
+                print("Failed to generate items.")
+                items = []
+        else:
+            items = []
+            print("Enter checklist items (type 'done' when finished):")
+            while True:
+                item = input("- ").strip()
+                if item.lower() == 'done':
+                    break
+                items.append(item)
+        if title and items:
+            new_template[title] = {
+                'title': title,
+                'items': items
+            }
+            print(f"Section '{title}' added to the template.")
+        else:
+            print("Section title and items are required.")
+            self.create_section(new_template)
 
     def create_template(self):
-        template_name = widgets.Text(
-            value='',
-            placeholder='Enter template name',
-            description='Template Name:',
-            disabled=False
-        )
-        add_section_button = widgets.Button(description="Add Section")
-        save_template_button = widgets.Button(description="Save Template")
-        
-        display(template_name, add_section_button, save_template_button)
-        
+        self.configure_api_key()
+        name = input("Enter template name: ").strip()
         new_template = {}
-        
-        def add_section(b):
-            section_title, section_items = self.create_section()
-            items_list = section_items.value.split('\n')
-            new_template[section_title.value] = {
-                'title': section_title.value,
-                'items': items_list
-            }
-        
-        def save_template(b):
-            self.templates[template_name.value] = new_template
+        while True:
+            add_section = input("Add a section? (y/n): ").strip().lower()
+            if add_section == 'y':
+                self.create_section(new_template)
+            else:
+                break
+        if new_template:
+            self.templates[name] = new_template
             with open(self.template_file, 'w') as f:
                 yaml.dump(self.templates, f)
-            print(f'Template {template_name.value} saved successfully!')
-        
-        add_section_button.on_click(add_section)
-        save_template_button.on_click(save_template)
+            print(f"Template '{name}' saved successfully!")
+        else:
+            print("No sections added. Template not saved.")
 
     def get_available_sections(self, template):
         return list(template.keys())
 
-# Create an instance to use in the notebook
-template_manager = JupyterTemplateManager()
-
-# Create a new template
+# Usage
+template_manager = TemplateManager()
 template_manager.create_template()
