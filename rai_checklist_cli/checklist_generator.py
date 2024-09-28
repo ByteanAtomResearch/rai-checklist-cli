@@ -1,6 +1,7 @@
 import json
 import yaml
 from typing import Dict, Union, List, Optional
+import google.generativeai as genai
 
 def generate_section(section_data):
     section = f"## {section_data['title']}\n"
@@ -8,11 +9,19 @@ def generate_section(section_data):
         section += f"- [ ] {item}\n"
     return section + "\n"
 
+def generate_checklist_items(section_title: str) -> List[str]:
+    model = genai.GenerativeModel('gemini-pro')
+    prompt = f"Generate a list of 5-10 checklist items for a section titled '{section_title}' in a Responsible AI Checklist for LLM Projects. Each item should be a concise, actionable task."
+    response = model.generate_content(prompt)
+    items = response.text.strip().split('\n')
+    return [item.lstrip('- ') for item in items if item.strip()]
+
 def generate_checklist(template: Dict[str, Dict[str, Union[str, List[str]]]], 
                        sections: List[str], 
                        file_format: str, 
                        title: str = "Responsible AI Checklist for LLM Projects",
-                       custom_checklist: Optional[str] = None) -> str:
+                       custom_checklist: Optional[str] = None,
+                       use_llm: bool = False) -> str:
     if custom_checklist:
         with open(custom_checklist, 'r') as file:
             template = yaml.safe_load(file)
@@ -23,7 +32,14 @@ def generate_checklist(template: Dict[str, Dict[str, Union[str, List[str]]]],
     template_name = template.get('name', '')
     full_title = f"{title} - {template_name}" if template_name else title
 
-    checklist_dict = {template[section]['title']: template[section]['items'] for section in sections if section in template}
+    checklist_dict = {}
+    for section in sections:
+        if section in template:
+            if use_llm:
+                items = generate_checklist_items(template[section]['title'])
+            else:
+                items = template[section]['items']
+            checklist_dict[template[section]['title']] = items
     
     if file_format == "md":
         checklist = f"# {full_title}\n\n"
