@@ -10,7 +10,7 @@ def validate_checklist(checklist_file, project_type, config):
     with open(checklist_file, 'r') as f:
         checklist = yaml.safe_load(f)
 
-    required_sections = config.get(project_type, config.get('default', {}))['required_sections']
+    required_sections = config.get(project_type, {}).get('required_sections', config.get('default', {}).get('required_sections', []))
     missing_sections = [s for s in required_sections if s not in checklist]
     validation_messages = []
     is_valid = True
