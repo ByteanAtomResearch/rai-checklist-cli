@@ -14,3 +14,16 @@ web_application:
     - 'Security Considerations'
     - 'Accessibility'
     - 'Performance Optimization'
+
+# Defines a list of project types that are considered critical.
+# For these project types, an additional set of 'critical_sections' must be present.
+critical_project_types:
+  - 'machine_learning'
+  - 'healthcare_ai'
+
+# Defines a list of sections that are mandatory for any project type
+# listed in 'critical_project_types'.
+critical_sections:
+  - 'Bias Mitigation'
+  - 'Ethical AI Review'
+  - 'Robustness and Safety'

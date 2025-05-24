@@ -7,10 +7,52 @@ from rai_checklist_cli.template_manager import TemplateManager
 from rai_checklist_cli.checklist_generator import generate_checklist
 from rai_checklist_cli.template_utils import create_custom_template, display_available_templates, focus_on_section
 from rai_checklist_cli.config import load_config
+from .validate_checklist import validate_checklist, load_config as load_validation_config
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
+
+
+def _perform_validation(args_namespace, logger_instance):
+    if args_namespace.project_type:
+        # Use the output file that was just written for validation
+        checklist_file_to_validate = args_namespace.output
+        validation_config_path = args_namespace.config if args_namespace.config else 'checklist_config.yaml'
+        try:
+            logger_instance.info(f"Loading validation configuration from: {validation_config_path}")
+            validation_cfg = load_validation_config(validation_config_path)
+            
+            logger_instance.info(f"Validating generated checklist '{checklist_file_to_validate}' for project type '{args_namespace.project_type}'")
+            # Ensure the checklist file for validation is the one just written (e.g. .md or .yaml)
+            # The validate_checklist function expects a path to a YAML file that it can load.
+            # If the generated checklist is .md, validation might not work as expected unless validate_checklist can handle it
+            # or we validate against an intermediate YAML if applicable.
+            # For now, proceeding with args_namespace.output as the checklist file.
+            # If generate_checklist produces a YAML file for validation purposes, that should be used.
+            # The current validate_checklist loads the checklist file with yaml.safe_load.
+            # This means the checklist file being validated *must* be in YAML format.
+            # If args_namespace.output is a .md file, this will fail.
+            # This is a potential issue based on current task description and previous knowledge of validate_checklist.
+            # For now, I will proceed as if args_namespace.output is a valid YAML for validation.
+
+            is_valid, messages = validate_checklist(checklist_file_to_validate, args_namespace.project_type, validation_cfg)
+            
+            print("\n--- Checklist Validation Report ---")
+            for message in messages:
+                print(message)
+            
+            if is_valid:
+                logger_instance.info("Checklist validation successful.")
+            else:
+                logger_instance.warning("Checklist validation failed. Please review the messages above.")
+                
+        except FileNotFoundError:
+            logger_instance.error(f"Validation configuration file not found: {validation_config_path}. Skipping validation.")
+        except yaml.YAMLError as e: # Catch YAML parsing errors specifically if checklist is not YAML
+            logger_instance.error(f"Error parsing checklist file '{checklist_file_to_validate}' for validation. Ensure it's a valid YAML file. Error: {e}. Skipping validation.")
+        except Exception as e:
+            logger_instance.error(f"An error occurred during validation: {e}. Skipping validation.", exc_info=True)
 
 def main(args=None):
     if args is None:
@@ -132,20 +174,33 @@ def main(args=None):
         with open(parsed_args.output, 'w') as f:
             f.write(checklist)
         logger.info(f'Responsible AI checklist for LLM projects generated and saved to {parsed_args.output}')
+        # Perform validation if project_type is specified
+        if parsed_args.format == 'yaml': # Only validate if the output is YAML
+            _perform_validation(parsed_args, logger)
+        elif parsed_args.project_type:
+             logger.info(f"Skipping validation for non-YAML output format: {parsed_args.format}. Project type was '{parsed_args.project_type}'.")
+
     elif parsed_args.command is None:
-        generate_command(parsed_args, template_manager)
+        # This block executes if no command is specified, defaulting to 'generate'
+        # Ensure logger is available or re-obtained if generate_command is more standalone
+        generate_command(parsed_args, template_manager, logger) # Pass logger
     else:
         parser.print_help()
         sys.exit(1)
 
-def generate_command(args, template_manager):
+def generate_command(args, template_manager, logger_instance): # Added logger_instance parameter
+    # Re-obtain logger if not passed, or ensure it's always passed.
+    # logger_instance = logger # If logger is global and configured
+    # Or: logger_instance = logging.getLogger(__name__) if not passed
+
     if not args.output.endswith(f".{args.format}"):
         args.output += f".{args.format}"
     
     if Path(args.output).exists() and not args.overwrite:
-        logger.error(f"Output file {args.output} already exists. Use -w or --overwrite to overwrite.")
+        logger_instance.error(f"Output file {args.output} already exists. Use -w or --overwrite to overwrite.")
         sys.exit(1)
 
+    # This config is for the template generation, not necessarily for validation config path.
     config = load_config(args.config) if args.config else None
     
     try:
@@ -168,22 +223,28 @@ def generate_command(args, template_manager):
         
         with open(args.output, 'w') as f:
             f.write(checklist_content)
-        logger.info(f'Responsible AI checklist for LLM projects generated and saved to {args.output}')
+        logger_instance.info(f'Responsible AI checklist for LLM projects generated and saved to {args.output}')
+        # Perform validation if project_type is specified
+        if args.format == 'yaml': # Only validate if the output is YAML
+            _perform_validation(args, logger_instance)
+        elif args.project_type:
+            logger_instance.info(f"Skipping validation for non-YAML output format: {args.format}. Project type was '{args.project_type}'.")
+
     except KeyError as e:
-        logger.error(f"Error: Missing key in template - {e}")
-        logger.debug("Template structure:", exc_info=True)
+        logger_instance.error(f"Error: Missing key in template - {e}")
+        logger_instance.debug("Template structure:", exc_info=True)
         sys.exit(1)
     except AttributeError as e:
-        logger.error(f"Error: Missing attribute - {e}")
-        logger.debug("Ensure all required fields are present in the template", exc_info=True)
+        logger_instance.error(f"Error: Missing attribute - {e}")
+        logger_instance.debug("Ensure all required fields are present in the template", exc_info=True)
         sys.exit(1)
     except (IOError, ValueError) as e:
-        logger.error(f"Error: {e}")
-        logger.debug("", exc_info=True)
+        logger_instance.error(f"Error: {e}")
+        logger_instance.debug("", exc_info=True)
         sys.exit(1)
     except Exception as ex:
-        logger.error(f"An unexpected error occurred: {ex}")
-        logger.debug("", exc_info=True)
+        logger_instance.error(f"An unexpected error occurred: {ex}")
+        logger_instance.debug("", exc_info=True)
         sys.exit(1)
 
 if __name__ == '__main__':
